@@ -5,7 +5,7 @@ import CoreLocation
 
 public struct BoundingBox: Codable {
     
-    public init?(from coordinates: [CLLocationCoordinate2D]?) {
+    public init?(from coordinates: [LocationAndAltitude]?) {
         guard coordinates?.count ?? 0 > 0 else {
             return nil
         }
@@ -22,12 +22,12 @@ public struct BoundingBox: Codable {
         southEast = CLLocationCoordinate2D(latitude: minLat, longitude: maxLon)
     }
     
-    public init(_ northWest: CLLocationCoordinate2D, _ southEast: CLLocationCoordinate2D) {
-        self.northWest = northWest
-        self.southEast = southEast
+    public init(_ northWest: LocationAndAltitude, _ southEast: LocationAndAltitude) {
+        self.northWest = northWest.coordinate
+        self.southEast = southEast.coordinate
     }
     
-    public func contains(_ coordinate: CLLocationCoordinate2D) -> Bool {
+    public func contains(_ coordinate: LocationAndAltitude) -> Bool {
         return southEast.latitude < coordinate.latitude
             && northWest.latitude > coordinate.latitude
             && northWest.longitude < coordinate.longitude

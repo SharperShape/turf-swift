@@ -11,8 +11,8 @@ class MultiPolygonTests: XCTestCase {
     
     func testMultiPolygonFeature() {
         let data = try! Fixture.geojsonData(from: "multipolygon")!
-        let firstCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-        let lastCoordinate = CLLocationCoordinate2D(latitude: 11, longitude: 11)
+        let firstCoordinate = LocationAndAltitude(latitude: 0, longitude: 0)
+        let lastCoordinate = LocationAndAltitude(latitude: 11, longitude: 11)
         
         let geojson = try! GeoJSON.parse(Feature.self, from: data)
         
@@ -40,32 +40,32 @@ class MultiPolygonTests: XCTestCase {
         [
             [
                 [
-                    CLLocationCoordinate2D(latitude: 0, longitude: 0),
-                    CLLocationCoordinate2D(latitude: 0, longitude: 5),
-                    CLLocationCoordinate2D(latitude: 0, longitude: 5),
-                    CLLocationCoordinate2D(latitude: 0, longitude: 10),
-                    CLLocationCoordinate2D(latitude: 10, longitude: 10),
-                    CLLocationCoordinate2D(latitude: 10, longitude: 0),
-                    CLLocationCoordinate2D(latitude: 5, longitude: 0),
-                    CLLocationCoordinate2D(latitude: 0, longitude: 0),
+                    LocationAndAltitude(latitude: 0, longitude: 0),
+                    LocationAndAltitude(latitude: 0, longitude: 5),
+                    LocationAndAltitude(latitude: 0, longitude: 5),
+                    LocationAndAltitude(latitude: 0, longitude: 10),
+                    LocationAndAltitude(latitude: 10, longitude: 10),
+                    LocationAndAltitude(latitude: 10, longitude: 0),
+                    LocationAndAltitude(latitude: 5, longitude: 0),
+                    LocationAndAltitude(latitude: 0, longitude: 0),
                 ],[
-                    CLLocationCoordinate2D(latitude: 5, longitude: 1),
-                    CLLocationCoordinate2D(latitude: 7, longitude: 1),
-                    CLLocationCoordinate2D(latitude: 8.5, longitude: 1),
-                    CLLocationCoordinate2D(latitude: 8.5, longitude: 4.5),
-                    CLLocationCoordinate2D(latitude: 7, longitude: 4.5),
-                    CLLocationCoordinate2D(latitude: 5, longitude: 4.5),
-                    CLLocationCoordinate2D(latitude: 5, longitude: 1)
+                    LocationAndAltitude(latitude: 5, longitude: 1),
+                    LocationAndAltitude(latitude: 7, longitude: 1),
+                    LocationAndAltitude(latitude: 8.5, longitude: 1),
+                    LocationAndAltitude(latitude: 8.5, longitude: 4.5),
+                    LocationAndAltitude(latitude: 7, longitude: 4.5),
+                    LocationAndAltitude(latitude: 5, longitude: 4.5),
+                    LocationAndAltitude(latitude: 5, longitude: 1)
                 ]
             ],[
                 [
-                    CLLocationCoordinate2D(latitude: 11, longitude: 11),
-                    CLLocationCoordinate2D(latitude: 11.5, longitude: 11.5),
-                    CLLocationCoordinate2D(latitude: 12, longitude: 12),
-                    CLLocationCoordinate2D(latitude: 11, longitude: 12),
-                    CLLocationCoordinate2D(latitude: 11, longitude: 11.5),
-                    CLLocationCoordinate2D(latitude: 11, longitude: 11),
-                    CLLocationCoordinate2D(latitude: 11, longitude: 11)
+                    LocationAndAltitude(latitude: 11, longitude: 11),
+                    LocationAndAltitude(latitude: 11.5, longitude: 11.5),
+                    LocationAndAltitude(latitude: 12, longitude: 12),
+                    LocationAndAltitude(latitude: 11, longitude: 12),
+                    LocationAndAltitude(latitude: 11, longitude: 11.5),
+                    LocationAndAltitude(latitude: 11, longitude: 11),
+                    LocationAndAltitude(latitude: 11, longitude: 11)
                 ]
             ]
         ]

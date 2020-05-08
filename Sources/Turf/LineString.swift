@@ -22,15 +22,15 @@ extension Geometry.LineStringRepresentation {
     }
     
     /// Returns a `.LineString` along a `.LineString` within a distance from a coordinate.
-    public func trimmed(from coordinate: CLLocationCoordinate2D, distance: CLLocationDistance) -> Geometry.LineStringRepresentation? {
+    public func trimmed(from coordinate: LocationAndAltitude, distance: CLLocationDistance) -> Geometry.LineStringRepresentation? {
         let startVertex = closestCoordinate(to: coordinate)
         guard startVertex != nil && distance != 0 else {
             return nil
         }
         
-        var vertices: [CLLocationCoordinate2D] = [startVertex!.coordinate]
+        var vertices: [LocationAndAltitude] = [startVertex!.coordinate]
         var cumulativeDistance: CLLocationDistance = 0
-        let addVertex = { (vertex: CLLocationCoordinate2D) -> Bool in
+        let addVertex = { (vertex: LocationAndAltitude) -> Bool in
             let lastVertex = vertices.last!
             let incrementalDistance = lastVertex.distance(to: vertex)
             if cumulativeDistance + incrementalDistance <= abs(distance) {
@@ -69,15 +69,15 @@ extension Geometry.LineStringRepresentation {
     /// of the polyline.
     public struct IndexedCoordinate {
         /// The coordinate
-        public let coordinate: Array<CLLocationCoordinate2D>.Element
+        public let coordinate: Array<LocationAndAltitude>.Element
         /// The index of the coordinate
-        public let index: Array<CLLocationCoordinate2D>.Index
+        public let index: Array<LocationAndAltitude>.Index
         /// The coordinate’s distance from the start of the polyline
         public let distance: CLLocationDistance
     }
     
     /// Returns a coordinate along a `.LineString` at a certain distance from the start of the polyline.
-    public func coordinateFromStart(distance: CLLocationDistance) -> CLLocationCoordinate2D? {
+    public func coordinateFromStart(distance: CLLocationDistance) -> LocationAndAltitude? {
         return indexedCoordinateFromStart(distance: distance)?.coordinate
     }
     
@@ -120,7 +120,7 @@ extension Geometry.LineStringRepresentation {
     /// Returns the distance along a slice of a `.LineString` with the given endpoints.
     ///
     /// Ported from https://github.com/Turfjs/turf/blob/142e137ce0c758e2825a260ab32b24db0aa19439/packages/turf-line-slice/index.js
-    public func distance(from start: CLLocationCoordinate2D? = nil, to end: CLLocationCoordinate2D? = nil) -> CLLocationDistance? {
+    public func distance(from start: LocationAndAltitude? = nil, to end: LocationAndAltitude? = nil) -> CLLocationDistance? {
         guard !coordinates.isEmpty else { return nil }
         
         guard let slicedCoordinates = sliced(from: start, to: end)?.coordinates else {
@@ -134,7 +134,7 @@ extension Geometry.LineStringRepresentation {
     /// Returns a subset of the `.LineString` between given coordinates.
     ///
     /// Ported from https://github.com/Turfjs/turf/blob/142e137ce0c758e2825a260ab32b24db0aa19439/packages/turf-line-slice/index.js
-    public func sliced(from start: CLLocationCoordinate2D? = nil, to end: CLLocationCoordinate2D? = nil) -> Geometry.LineStringRepresentation? {
+    public func sliced(from start: LocationAndAltitude? = nil, to end: LocationAndAltitude? = nil) -> Geometry.LineStringRepresentation? {
         guard !coordinates.isEmpty else { return nil }
                 
         let startVertex = (start != nil ? closestCoordinate(to: start!) : nil) ?? IndexedCoordinate(coordinate: coordinates.first!, index: 0, distance: 0)
@@ -160,7 +160,7 @@ extension Geometry.LineStringRepresentation {
     ///
     /// Ported from https://github.com/Turfjs/turf/blob/142e137ce0c758e2825a260ab32b24db0aa19439/packages/turf-point-on-line/index.js
     
-    public func closestCoordinate(to coordinate: CLLocationCoordinate2D) -> IndexedCoordinate? {
+    public func closestCoordinate(to coordinate: LocationAndAltitude) -> IndexedCoordinate? {
         guard !coordinates.isEmpty else { return nil }
         
         guard coordinates.count > 1 else {

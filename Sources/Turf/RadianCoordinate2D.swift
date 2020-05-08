@@ -14,12 +14,19 @@ public typealias RadianDirection = Double
 public struct RadianCoordinate2D {
     private(set) var latitude: LocationRadians
     private(set) var longitude: LocationRadians
+    private(set) var altitude: LocationRadians?
     
     public init(latitude: LocationRadians, longitude: LocationRadians) {
         self.latitude = latitude
         self.longitude = longitude
     }
     
+    public init(_ degreeCoordinate: LocationAndAltitude) {
+        latitude = degreeCoordinate.latitude.toRadians()
+        longitude = degreeCoordinate.longitude.toRadians()
+        altitude = degreeCoordinate.altitude
+    }
+
     public init(_ degreeCoordinate: CLLocationCoordinate2D) {
         latitude = degreeCoordinate.latitude.toRadians()
         longitude = degreeCoordinate.longitude.toRadians()

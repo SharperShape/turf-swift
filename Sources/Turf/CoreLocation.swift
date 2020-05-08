@@ -50,6 +50,50 @@ extension CLLocationDirection {
     }
 }
 
+struct LocationAndAltitudeCodable: Codable {
+    var latitude: CLLocationDegrees
+    var longitude: CLLocationDegrees
+    var altitude: CLLocationDegrees?
+    var decodedCoordinates: LocationAndAltitude {
+        return LocationAndAltitude(latitude: latitude,
+                                   longitude: longitude,
+                                   altitude: altitude)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.unkeyedContainer()
+        try container.encode(longitude)
+        try container.encode(latitude)
+        try container.encode(altitude)
+    }
+
+    init(from decoder: Decoder) throws {
+        var container = try decoder.unkeyedContainer()
+        longitude = try container.decode(CLLocationDegrees.self)
+        latitude = try container.decode(CLLocationDegrees.self)
+        altitude = try container.decode(CLLocationDegrees.self)
+    }
+
+    init(_ coordinate: CLLocationCoordinate2D) {
+        latitude = coordinate.latitude
+        longitude = coordinate.longitude
+        altitude = nil
+    }
+
+    init(_ locationAltitude: LocationAndAltitude) {
+        longitude = locationAltitude.longitude
+        latitude = locationAltitude.latitude
+        altitude = locationAltitude.altitude
+    }
+}
+
+extension LocationAndAltitudeCodable: Equatable {
+    public static func ==(lhs: LocationAndAltitudeCodable, rhs: LocationAndAltitudeCodable) -> Bool {
+        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+    }
+}
+
+
 struct CLLocationCoordinate2DCodable: Codable {
     var latitude: CLLocationDegrees
     var longitude: CLLocationDegrees
@@ -73,6 +117,80 @@ struct CLLocationCoordinate2DCodable: Codable {
     init(_ coordinate: CLLocationCoordinate2D) {
         latitude = coordinate.latitude
         longitude = coordinate.longitude
+    }
+}
+
+extension LocationAndAltitude {
+    var codableCoordinates: LocationAndAltitudeCodable {
+        return LocationAndAltitudeCodable(self)
+    }
+}
+
+extension LocationAndAltitude: Equatable {
+
+    /// Instantiates a CLLocationCoordinate from a RadianCoordinate2D
+    public init(_ radianCoordinate: RadianCoordinate2D) {
+        self.init(latitude: radianCoordinate.latitude.toDegrees(),
+                  longitude: radianCoordinate.longitude.toDegrees(),
+                  altitude: radianCoordinate.altitude)
+    }
+
+    public static func ==(lhs: LocationAndAltitude, rhs: LocationAndAltitude) -> Bool {
+        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude && lhs.altitude == rhs.altitude
+    }
+
+    /// Returns the direction from the receiver to the given coordinate.
+    public func direction(to coordinate: LocationAndAltitude) -> CLLocationDirection {
+        return RadianCoordinate2D(self).direction(to: RadianCoordinate2D(coordinate)).toDegrees()
+    }
+
+    /// Returns a coordinate a certain Haversine distance away in the given direction.
+    public func coordinate(at distance: CLLocationDistance, facing direction: CLLocationDirection) -> LocationAndAltitude {
+        let radianCoordinate = RadianCoordinate2D(self).coordinate(at: distance / metersPerRadian, facing: direction.toRadians())
+        return LocationAndAltitude(radianCoordinate)
+    }
+
+    /**
+     Returns the Haversine distance between two coordinates measured in degrees.
+     */
+    public func distance(to coordinate: LocationAndAltitude) -> CLLocationDistance {
+        return RadianCoordinate2D(self).distance(to: RadianCoordinate2D(coordinate)) * metersPerRadian
+    }
+}
+
+extension Array where Element == LocationAndAltitudeCodable {
+    var decodedCoordinates: [LocationAndAltitude] {
+        return map { $0.decodedCoordinates }
+    }
+}
+
+extension Array where Element == [LocationAndAltitudeCodable] {
+    var decodedCoordinates: [[LocationAndAltitude]] {
+        return map { $0.decodedCoordinates }
+    }
+}
+
+extension Array where Element == [[LocationAndAltitudeCodable]] {
+    var decodedCoordinates: [[[LocationAndAltitude]]] {
+        return map { $0.decodedCoordinates }
+    }
+}
+
+extension Array where Element == LocationAndAltitude {
+    var codableCoordinates: [LocationAndAltitudeCodable] {
+        return map { $0.codableCoordinates }
+    }
+}
+
+extension Array where Element == [LocationAndAltitude] {
+    var codableCoordinates: [[LocationAndAltitudeCodable]] {
+        return map { $0.codableCoordinates }
+    }
+}
+
+extension Array where Element == [[LocationAndAltitude]] {
+    var codableCoordinates: [[[LocationAndAltitudeCodable]]] {
+        return map { $0.codableCoordinates }
     }
 }
 
