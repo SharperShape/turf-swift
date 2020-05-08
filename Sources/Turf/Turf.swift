@@ -8,7 +8,7 @@ let metersPerRadian: CLLocationDistance = 6_373_000.0
 // WGS84 equatorial radius as specified by the International Union of Geodesy and Geophysics
 let equatorialRadius: CLLocationDistance = 6_378_137
 
-public typealias LineSegment = (LocationAndAltitude, LocationAndAltitude)
+public typealias LineSegment = (Location, Location)
 
 
 public struct Turf {
@@ -16,7 +16,7 @@ public struct Turf {
     /**
      Returns the intersection of two line segments.
      */
-    public static func intersection(_ line1: LineSegment, _ line2: LineSegment) -> LocationAndAltitude? {
+    public static func intersection(_ line1: LineSegment, _ line2: LineSegment) -> Location? {
         // Ported from https://github.com/Turfjs/turf/blob/142e137ce0c758e2825a260ab32b24db0aa19439/packages/turf-point-on-line/index.js, in turn adapted from http://jsfiddle.net/justin_c_rounds/Gd2S2/light/
         let denominator = ((line2.1.latitude - line2.0.latitude) * (line1.1.longitude - line1.0.longitude))
             - ((line2.1.longitude - line2.0.longitude) * (line1.1.latitude - line1.0.latitude))
@@ -32,7 +32,7 @@ public struct Turf {
         let b = numerator2 / denominator
         
         /// Intersection when the lines are cast infinitely in both directions.
-        let intersection = LocationAndAltitude(latitude: line1.0.latitude + a * (line1.1.latitude - line1.0.latitude),
+        let intersection = Location(latitude: line1.0.latitude + a * (line1.1.latitude - line1.0.latitude),
                                                   longitude: line1.0.longitude + a * (line1.1.longitude - line1.0.longitude))
         
         /// True if line 1 is finite and line 2 is infinite.
@@ -46,7 +46,7 @@ public struct Turf {
 /**
  Returns the point midway between two coordinates measured in degrees
  */
-public func mid(_ coord1: LocationAndAltitude, _ coord2: LocationAndAltitude) -> LocationAndAltitude{
+public func mid(_ coord1: Location, _ coord2: Location) -> Location{
     let dist = coord1.distance(to: coord2)
     let heading = coord1.direction(to: coord2)
     return coord1.coordinate(at: dist / 2, facing: heading)

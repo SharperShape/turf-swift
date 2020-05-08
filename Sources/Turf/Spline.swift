@@ -9,7 +9,7 @@ struct SplinePoint {
     let y: CLLocationDegrees
     let z: CLLocationDegrees
     
-    init(coordinate: LocationAndAltitude) {
+    init(coordinate: Location) {
         x = coordinate.longitude
         y = coordinate.latitude
         z = coordinate.altitude ?? 0
@@ -21,8 +21,8 @@ struct SplinePoint {
         self.z = z
     }
     
-    var coordinate: LocationAndAltitude {
-        return LocationAndAltitude(latitude: y, longitude: x, altitude: z)
+    var coordinate: Location {
+        return Location(latitude: y, longitude: x, altitude: z)
     }
 }
 

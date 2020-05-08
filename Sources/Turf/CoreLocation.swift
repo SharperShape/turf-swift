@@ -50,12 +50,12 @@ extension CLLocationDirection {
     }
 }
 
-struct LocationAndAltitudeCodable: Codable {
+struct LocationCodable: Codable {
     var latitude: CLLocationDegrees
     var longitude: CLLocationDegrees
     var altitude: CLLocationDegrees?
-    var decodedCoordinates: LocationAndAltitude {
-        return LocationAndAltitude(latitude: latitude,
+    var decodedCoordinates: Location {
+        return Location(latitude: latitude,
                                    longitude: longitude,
                                    altitude: altitude)
     }
@@ -80,15 +80,15 @@ struct LocationAndAltitudeCodable: Codable {
         altitude = nil
     }
 
-    init(_ locationAltitude: LocationAndAltitude) {
+    init(_ locationAltitude: Location) {
         longitude = locationAltitude.longitude
         latitude = locationAltitude.latitude
         altitude = locationAltitude.altitude
     }
 }
 
-extension LocationAndAltitudeCodable: Equatable {
-    public static func ==(lhs: LocationAndAltitudeCodable, rhs: LocationAndAltitudeCodable) -> Bool {
+extension LocationCodable: Equatable {
+    public static func ==(lhs: LocationCodable, rhs: LocationCodable) -> Bool {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
 }
@@ -120,13 +120,13 @@ struct CLLocationCoordinate2DCodable: Codable {
     }
 }
 
-extension LocationAndAltitude {
-    var codableCoordinates: LocationAndAltitudeCodable {
-        return LocationAndAltitudeCodable(self)
+extension Location {
+    var codableCoordinates: LocationCodable {
+        return LocationCodable(self)
     }
 }
 
-extension LocationAndAltitude: Equatable {
+extension Location: Equatable {
 
     /// Instantiates a CLLocationCoordinate from a RadianCoordinate2D
     public init(_ radianCoordinate: RadianCoordinate2D) {
@@ -135,61 +135,61 @@ extension LocationAndAltitude: Equatable {
                   altitude: radianCoordinate.altitude)
     }
 
-    public static func ==(lhs: LocationAndAltitude, rhs: LocationAndAltitude) -> Bool {
+    public static func ==(lhs: Location, rhs: Location) -> Bool {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude && lhs.altitude == rhs.altitude
     }
 
     /// Returns the direction from the receiver to the given coordinate.
-    public func direction(to coordinate: LocationAndAltitude) -> CLLocationDirection {
+    public func direction(to coordinate: Location) -> CLLocationDirection {
         return RadianCoordinate2D(self).direction(to: RadianCoordinate2D(coordinate)).toDegrees()
     }
 
     /// Returns a coordinate a certain Haversine distance away in the given direction.
-    public func coordinate(at distance: CLLocationDistance, facing direction: CLLocationDirection) -> LocationAndAltitude {
+    public func coordinate(at distance: CLLocationDistance, facing direction: CLLocationDirection) -> Location {
         let radianCoordinate = RadianCoordinate2D(self).coordinate(at: distance / metersPerRadian, facing: direction.toRadians())
-        return LocationAndAltitude(radianCoordinate)
+        return Location(radianCoordinate)
     }
 
     /**
      Returns the Haversine distance between two coordinates measured in degrees.
      */
-    public func distance(to coordinate: LocationAndAltitude) -> CLLocationDistance {
+    public func distance(to coordinate: Location) -> CLLocationDistance {
         return RadianCoordinate2D(self).distance(to: RadianCoordinate2D(coordinate)) * metersPerRadian
     }
 }
 
-extension Array where Element == LocationAndAltitudeCodable {
-    var decodedCoordinates: [LocationAndAltitude] {
+extension Array where Element == LocationCodable {
+    var decodedCoordinates: [Location] {
         return map { $0.decodedCoordinates }
     }
 }
 
-extension Array where Element == [LocationAndAltitudeCodable] {
-    var decodedCoordinates: [[LocationAndAltitude]] {
+extension Array where Element == [LocationCodable] {
+    var decodedCoordinates: [[Location]] {
         return map { $0.decodedCoordinates }
     }
 }
 
-extension Array where Element == [[LocationAndAltitudeCodable]] {
-    var decodedCoordinates: [[[LocationAndAltitude]]] {
+extension Array where Element == [[LocationCodable]] {
+    var decodedCoordinates: [[[Location]]] {
         return map { $0.decodedCoordinates }
     }
 }
 
-extension Array where Element == LocationAndAltitude {
-    var codableCoordinates: [LocationAndAltitudeCodable] {
+extension Array where Element == Location {
+    var codableCoordinates: [LocationCodable] {
         return map { $0.codableCoordinates }
     }
 }
 
-extension Array where Element == [LocationAndAltitude] {
-    var codableCoordinates: [[LocationAndAltitudeCodable]] {
+extension Array where Element == [Location] {
+    var codableCoordinates: [[LocationCodable]] {
         return map { $0.codableCoordinates }
     }
 }
 
-extension Array where Element == [[LocationAndAltitude]] {
-    var codableCoordinates: [[[LocationAndAltitudeCodable]]] {
+extension Array where Element == [[Location]] {
+    var codableCoordinates: [[[LocationCodable]]] {
         return map { $0.codableCoordinates }
     }
 }

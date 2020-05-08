@@ -68,7 +68,7 @@ public enum Geometry {
     }
 }
 
-public struct LocationAndAltitude {
+public struct Location {
     public var latitude: CLLocationDegrees
     public var longitude: CLLocationDegrees
     public var altitude: CLLocationDegrees?
@@ -88,49 +88,49 @@ public struct LocationAndAltitude {
 
 public extension Geometry {
     struct PointRepresentation: Equatable {
-        public let coordinates: LocationAndAltitude
+        public let coordinates: Location
         
-        public init(_ coordinates: LocationAndAltitude) {
+        public init(_ coordinates: Location) {
             self.coordinates = coordinates
         }
     }
     
     struct LineStringRepresentation: Equatable {
-        public let coordinates: [LocationAndAltitude]
+        public let coordinates: [Location]
         
-        public init(_ coordinates: [LocationAndAltitude]) {
+        public init(_ coordinates: [Location]) {
             self.coordinates = coordinates
         }
     }
     
     struct PolygonRepresentation: Equatable {
-        public let coordinates: [[LocationAndAltitude]]
+        public let coordinates: [[Location]]
         
-        public init(_ coordinates: [[LocationAndAltitude]]) {
+        public init(_ coordinates: [[Location]]) {
             self.coordinates = coordinates
         }
     }
     
     struct MultiPointRepresentation: Equatable {
-        public let coordinates: [LocationAndAltitude]
+        public let coordinates: [Location]
         
-        public init(_ coordinates: [LocationAndAltitude]) {
+        public init(_ coordinates: [Location]) {
             self.coordinates = coordinates
         }
     }
     
     struct MultiLineStringRepresentation: Equatable {
-        public let coordinates: [[LocationAndAltitude]]
+        public let coordinates: [[Location]]
         
-        public init(_ coordinates: [[LocationAndAltitude]]) {
+        public init(_ coordinates: [[Location]]) {
             self.coordinates = coordinates
         }
     }
     
     struct MultiPolygonRepresentation: Equatable {
-        public let coordinates: [[[LocationAndAltitude]]]
+        public let coordinates: [[[Location]]]
         
-        public init(_ coordinates: [[[LocationAndAltitude]]]) {
+        public init(_ coordinates: [[[Location]]]) {
             self.coordinates = coordinates
         }
     }
@@ -151,22 +151,22 @@ extension Geometry: Codable {
             
             switch type {
             case .Point:
-                let coordinates = try container.decode(LocationAndAltitudeCodable.self, forKey: .coordinates).decodedCoordinates
+                let coordinates = try container.decode(LocationCodable.self, forKey: .coordinates).decodedCoordinates
                 self = .Point(coordinates: PointRepresentation(coordinates))
             case .LineString:
-                let coordinates = try container.decode([LocationAndAltitudeCodable].self, forKey: .coordinates).decodedCoordinates
+                let coordinates = try container.decode([LocationCodable].self, forKey: .coordinates).decodedCoordinates
                 self = .LineString(coordinates: LineStringRepresentation(coordinates))
             case .Polygon:
-                let coordinates = try container.decode([[LocationAndAltitudeCodable]].self, forKey: .coordinates).decodedCoordinates
+                let coordinates = try container.decode([[LocationCodable]].self, forKey: .coordinates).decodedCoordinates
                 self = .Polygon(coordinates: PolygonRepresentation(coordinates))
             case .MultiPoint:
-                let coordinates = try container.decode([LocationAndAltitudeCodable].self, forKey: .coordinates).decodedCoordinates
+                let coordinates = try container.decode([LocationCodable].self, forKey: .coordinates).decodedCoordinates
                 self = .MultiPoint(coordinates: MultiPointRepresentation(coordinates))
             case .MultiLineString:
-                let coordinates = try container.decode([[LocationAndAltitudeCodable]].self, forKey: .coordinates).decodedCoordinates
+                let coordinates = try container.decode([[LocationCodable]].self, forKey: .coordinates).decodedCoordinates
                 self = .MultiLineString(coordinates: MultiLineStringRepresentation(coordinates))
             case .MultiPolygon:
-                let coordinates = try container.decode([[[LocationAndAltitudeCodable]]].self, forKey: .coordinates).decodedCoordinates
+                let coordinates = try container.decode([[[LocationCodable]]].self, forKey: .coordinates).decodedCoordinates
                 self = .MultiPolygon(coordinates: MultiPolygonRepresentation(coordinates))
             case .GeometryCollection:
                 let geometries = try container.decode([Geometry].self, forKey: .geometries)

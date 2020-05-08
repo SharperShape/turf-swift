@@ -9,41 +9,41 @@ class BoundingBoxTests: XCTestCase {
     
     func testAllPositive() {
         let coordinates = [
-            LocationAndAltitude(latitude: 1, longitude: 2),
-            LocationAndAltitude(latitude: 2, longitude: 1)
+            Location(latitude: 1, longitude: 2),
+            Location(latitude: 2, longitude: 1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, LocationAndAltitude(latitude: 2, longitude: 1).coordinate)
-        XCTAssertEqual(bbox!.southEast, LocationAndAltitude(latitude: 1, longitude: 2).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: 2, longitude: 1).coordinate)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: 1, longitude: 2).coordinate)
     }
     
     func testAllNegative() {
         let coordinates = [
-            LocationAndAltitude(latitude: -1, longitude: -2),
-            LocationAndAltitude(latitude: -2, longitude: -1)
+            Location(latitude: -1, longitude: -2),
+            Location(latitude: -2, longitude: -1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, LocationAndAltitude(latitude: -1, longitude: -2).coordinate)
-        XCTAssertEqual(bbox!.southEast, LocationAndAltitude(latitude: -2, longitude: -1).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: -1, longitude: -2).coordinate)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: -2, longitude: -1).coordinate)
     }
     
     func testPositiveLatNegativeLon() {
         let coordinates = [
-            LocationAndAltitude(latitude: 1, longitude: -2),
-            LocationAndAltitude(latitude: 2, longitude: -1)
+            Location(latitude: 1, longitude: -2),
+            Location(latitude: 2, longitude: -1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, LocationAndAltitude(latitude: 2, longitude: -2).coordinate)
-        XCTAssertEqual(bbox!.southEast, LocationAndAltitude(latitude: 1, longitude: -1).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: 2, longitude: -2).coordinate)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: 1, longitude: -1).coordinate)
     }
     
     func testNegativeLatPositiveLon() {
         let coordinates = [
-            LocationAndAltitude(latitude: -1, longitude: 2),
-            LocationAndAltitude(latitude: -2, longitude: 1)
+            Location(latitude: -1, longitude: 2),
+            Location(latitude: -2, longitude: 1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, LocationAndAltitude(latitude: -1, longitude: 1).coordinate)
-        XCTAssertEqual(bbox!.southEast, LocationAndAltitude(latitude: -2, longitude: 2).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: -1, longitude: 1).coordinate)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: -2, longitude: 2).coordinate)
     }
 }

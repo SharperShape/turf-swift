@@ -24,8 +24,8 @@ class TurfTests: XCTestCase {
     }
     
     func testCLLocationCoordinate2() {
-        let coord1 = LocationAndAltitude(latitude: 35, longitude: 35)
-        let coord2 = LocationAndAltitude(latitude: -10, longitude: -10)
+        let coord1 = Location(latitude: 35, longitude: 35)
+        let coord2 = Location(latitude: -10, longitude: -10)
         let a = coord1.direction(to: coord2)
         XCTAssertEqual(a, -128, accuracy: 1)
         
@@ -35,8 +35,8 @@ class TurfTests: XCTestCase {
     }
     
     func testIntersection() {
-        let coord1 = LocationAndAltitude(latitude: 30, longitude: 30)
-        let a = Turf.intersection((LocationAndAltitude(latitude: 20, longitude: 20), LocationAndAltitude(latitude: 40, longitude: 40)), (LocationAndAltitude(latitude: 20, longitude: 40), LocationAndAltitude(latitude: 40, longitude: 20)))
+        let coord1 = Location(latitude: 30, longitude: 30)
+        let a = Turf.intersection((Location(latitude: 20, longitude: 20), Location(latitude: 40, longitude: 40)), (Location(latitude: 20, longitude: 40), Location(latitude: 40, longitude: 20)))
         XCTAssertEqual(a, coord1)
     }
     
@@ -55,7 +55,7 @@ class TurfTests: XCTestCase {
         let geometry = json["geometry"] as! [String: Any]
         let geoJSONCoordinates = geometry["coordinates"] as! [[[Double]]]
         let coordinates = geoJSONCoordinates.map {
-           $0.map { LocationAndAltitude(latitude: $0[1], longitude: $0[0]) }
+           $0.map { Location(latitude: $0[1], longitude: $0[0]) }
         }
         
         let polygon = Geometry.PolygonRepresentation(coordinates)
@@ -64,8 +64,8 @@ class TurfTests: XCTestCase {
     }
     
     func testBezierSplineTwoPoints() {
-        let point1 = LocationAndAltitude(latitude: 37.7749, longitude: 237.581)
-        let point2 = LocationAndAltitude(latitude: 35.6669502038, longitude: 139.7731286197)
+        let point1 = Location(latitude: 37.7749, longitude: 237.581)
+        let point2 = Location(latitude: 35.6669502038, longitude: 139.7731286197)
         let line = [point1, point2]
         let lineString = Geometry.LineStringRepresentation(line)
         guard let bezierLineString = lineString.bezier() else {
@@ -84,10 +84,10 @@ class TurfTests: XCTestCase {
     }
     
     func testBezierSplineSimple() {
-        let point1 = LocationAndAltitude(latitude: -22.91792293614603, longitude: 121.025390625)
-        let point2 = LocationAndAltitude(latitude: -19.394067895396613, longitude: 130.6494140625)
-        let point3 = LocationAndAltitude(latitude: -25.681137335685307, longitude: 138.33984375)
-        let point4 = LocationAndAltitude(latitude: -32.026706293336126, longitude: 138.3837890625)
+        let point1 = Location(latitude: -22.91792293614603, longitude: 121.025390625)
+        let point2 = Location(latitude: -19.394067895396613, longitude: 130.6494140625)
+        let point3 = Location(latitude: -25.681137335685307, longitude: 138.33984375)
+        let point4 = Location(latitude: -32.026706293336126, longitude: 138.3837890625)
         let line = [point1, point2, point3, point4]
         let lineString = Geometry.LineStringRepresentation(line)
         guard let bezierLineString = lineString.bezier() else {
@@ -107,8 +107,8 @@ class TurfTests: XCTestCase {
     
     func testMidHorizEquator()
     {
-        let coord1 = LocationAndAltitude(latitude: 0.0, longitude: 0.0)
-        let coord2 = LocationAndAltitude(latitude: 0.0, longitude: 10.0)
+        let coord1 = Location(latitude: 0.0, longitude: 0.0)
+        let coord2 = Location(latitude: 0.0, longitude: 10.0)
         
         let midCoord = mid(coord1, coord2)
         XCTAssertEqual(coord1.distance(to: midCoord), coord2.distance(to: midCoord), accuracy: 1)
@@ -116,8 +116,8 @@ class TurfTests: XCTestCase {
     
     func testMidVertFromEquator()
     {
-        let coord1 = LocationAndAltitude(latitude: 0.0, longitude: 0.0)
-        let coord2 = LocationAndAltitude(latitude: 10.0, longitude: 0.0)
+        let coord1 = Location(latitude: 0.0, longitude: 0.0)
+        let coord2 = Location(latitude: 10.0, longitude: 0.0)
         
         let midCoord = mid(coord1, coord2)
         XCTAssertEqual(coord1.distance(to: midCoord), coord2.distance(to: midCoord), accuracy: 1)
@@ -125,8 +125,8 @@ class TurfTests: XCTestCase {
     
     func testMidVertToEquator()
     {
-        let coord1 = LocationAndAltitude(latitude: 10.0, longitude: 0.0)
-        let coord2 = LocationAndAltitude(latitude: 0.0, longitude: 0.0)
+        let coord1 = Location(latitude: 10.0, longitude: 0.0)
+        let coord2 = Location(latitude: 0.0, longitude: 0.0)
         
         let midCoord = mid(coord1, coord2)
         XCTAssertEqual(coord1.distance(to: midCoord), coord2.distance(to: midCoord), accuracy: 1)
@@ -134,8 +134,8 @@ class TurfTests: XCTestCase {
     
     func testMidDiagonalBackOverEquator()
     {
-        let coord1 = LocationAndAltitude(latitude: 10.0, longitude: -1.0)
-        let coord2 = LocationAndAltitude(latitude: -1.0, longitude: 1.0)
+        let coord1 = Location(latitude: 10.0, longitude: -1.0)
+        let coord2 = Location(latitude: -1.0, longitude: 1.0)
         
         let midCoord = mid(coord1, coord2)
         XCTAssertEqual(coord1.distance(to: midCoord), coord2.distance(to: midCoord), accuracy: 1)
@@ -143,8 +143,8 @@ class TurfTests: XCTestCase {
     
     func testMidDiagonalForwardOverEquator()
     {
-        let coord1 = LocationAndAltitude(latitude: -1.0, longitude: -5.0)
-        let coord2 = LocationAndAltitude(latitude: 10.0, longitude: 5.0)
+        let coord1 = Location(latitude: -1.0, longitude: -5.0)
+        let coord2 = Location(latitude: 10.0, longitude: 5.0)
         
         let midCoord = mid(coord1, coord2)
         XCTAssertEqual(coord1.distance(to: midCoord), coord2.distance(to: midCoord), accuracy: 1)
@@ -152,8 +152,8 @@ class TurfTests: XCTestCase {
     
     func testMidLongDistance()
     {
-        let coord1 = LocationAndAltitude(latitude: 21.94304553343818, longitude: 22.5)
-        let coord2 = LocationAndAltitude(latitude: 46.800059446787316, longitude: 92.10937499999999)
+        let coord1 = Location(latitude: 21.94304553343818, longitude: 22.5)
+        let coord2 = Location(latitude: 46.800059446787316, longitude: 92.10937499999999)
         
         let midCoord = mid(coord1, coord2)
         XCTAssertEqual(coord1.distance(to: midCoord), coord2.distance(to: midCoord), accuracy: 1)

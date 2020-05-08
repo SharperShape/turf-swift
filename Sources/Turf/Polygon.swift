@@ -31,7 +31,7 @@ extension Geometry.PolygonRepresentation {
     /// lies on the boundary line of the polygon or its interior rings.
     ///
     ///Ported from: https://github.com/Turfjs/turf/blob/e53677b0931da9e38bb947da448ee7404adc369d/packages/turf-boolean-point-in-polygon/index.ts#L31-L75
-    public func contains(_ coordinate: LocationAndAltitude, ignoreBoundary: Bool = false) -> Bool {
+    public func contains(_ coordinate: Location, ignoreBoundary: Bool = false) -> Bool {
         let bbox = BoundingBox(from: coordinates.first)
         guard bbox?.contains(coordinate) ?? false else {
             return false

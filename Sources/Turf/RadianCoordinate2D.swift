@@ -21,7 +21,7 @@ public struct RadianCoordinate2D {
         self.longitude = longitude
     }
     
-    public init(_ degreeCoordinate: LocationAndAltitude) {
+    public init(_ degreeCoordinate: Location) {
         latitude = degreeCoordinate.latitude.toRadians()
         longitude = degreeCoordinate.longitude.toRadians()
         altitude = degreeCoordinate.altitude

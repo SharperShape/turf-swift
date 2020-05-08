@@ -7,9 +7,9 @@ import CoreLocation
  Creates a `Ring` struct that represents a closed figure that is bounded by three or more straight line segments.
  */
 public struct Ring {
-    public var coordinates: [LocationAndAltitude]
+    public var coordinates: [Location]
     
-    public init(coordinates: [LocationAndAltitude]) {
+    public init(coordinates: [Location]) {
         self.coordinates = coordinates
     }
     
@@ -29,7 +29,7 @@ public struct Ring {
         if coordinatesCount > 2 {
             for index in 0..<coordinatesCount {
                 
-                let controlPoints: (LocationAndAltitude, LocationAndAltitude, LocationAndAltitude)
+                let controlPoints: (Location, Location, Location)
                 
                 if index == coordinatesCount - 2 {
                     controlPoints = (coordinates[coordinatesCount - 2],
@@ -62,8 +62,8 @@ extension Ring {
      *
      * Ported from: https://github.com/Turfjs/turf/blob/e53677b0931da9e38bb947da448ee7404adc369d/packages/turf-boolean-point-in-polygon/index.ts#L77-L108
      */
-    public func contains(_ coordinate: LocationAndAltitude, ignoreBoundary: Bool = false) -> Bool {
-        var ring: ArraySlice<LocationAndAltitude>!
+    public func contains(_ coordinate: Location, ignoreBoundary: Bool = false) -> Bool {
+        var ring: ArraySlice<Location>!
         var isInside = false
         if coordinates.first == coordinates.last {
             ring = coordinates.prefix(coordinates.count - 1)
