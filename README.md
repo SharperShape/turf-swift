@@ -93,6 +93,9 @@ Turf.js | Turf-swift
 — | `CLLocationDirection.wrap(min:max:)`
 [turf-polygon-to-line](https://github.com/Turfjs/turf/tree/master/packages/turf-polygon-to-line/) | `Geometry.LineString(_:)`<br>`Geometry.MultiLineString(_:)`<br>`FeatureCollection(_:)`
 
+## New Location type for altitude instead of CLLocationCoordinate2D
+
+Note: New type uses altitude as an optional field
 
 ## GeoJSON
 

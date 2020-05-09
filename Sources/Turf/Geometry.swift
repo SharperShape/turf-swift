@@ -68,7 +68,7 @@ public enum Geometry {
     }
 }
 
-public struct Location {
+public struct Location: Hashable {
     public var latitude: CLLocationDegrees
     public var longitude: CLLocationDegrees
     public var altitude: CLLocationDegrees?
@@ -83,7 +83,6 @@ public struct Location {
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
-
 }
 
 public extension Geometry {
@@ -177,21 +176,65 @@ extension Geometry: Codable {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(type.rawValue, forKey: .type)
 
-//            switch self {
-//            case .Point(let representation):
-//                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
-//            case .LineString(let representation):
-//                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
-//            case .Polygon(let representation):
-//                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
-//            case .MultiPoint(let representation):
-//                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
-//            case .MultiLineString(let representation):
-//                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
-//            case .MultiPolygon(let representation):
-//                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
-//            case .GeometryCollection(let representation):
-//                try container.encode(representation.geometries, forKey: .geometries)
-//            }
+            switch self {
+            case .Point(let representation):
+                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
+            case .LineString(let representation):
+                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
+            case .Polygon(let representation):
+                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
+            case .MultiPoint(let representation):
+                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
+            case .MultiLineString(let representation):
+                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
+            case .MultiPolygon(let representation):
+                try container.encode(representation.coordinates.codableCoordinates, forKey: .coordinates)
+            case .GeometryCollection(let representation):
+                try container.encode(representation.geometries, forKey: .geometries)
+            }
         }
+}
+
+extension Geometry: Equatable {
+     public static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.Point(let lhsCoordinates), .Point(let rhsCoordinates)):
+            return lhsCoordinates == rhsCoordinates
+        case (.LineString(let lhsCoordinates), .LineString(let rhsCoordinates)):
+            return lhsCoordinates == rhsCoordinates
+        case (.Polygon(let lhsCoordinates), .Polygon(let rhsCoordinates)):
+            return lhsCoordinates == rhsCoordinates
+        case (.MultiPoint(let lhsCoordinates), .MultiPoint(let rhsCoordinates)):
+            return lhsCoordinates == rhsCoordinates
+        case (.MultiLineString(let lhsCoordinates), .MultiLineString(let rhsCoordinates)):
+            return lhsCoordinates == rhsCoordinates
+        case (.MultiPolygon(let lhsCoordinates), .MultiPolygon(let rhsCoordinates)):
+            return lhsCoordinates == rhsCoordinates
+        case (.GeometryCollection(let lhsGeometry), .GeometryCollection(let rhsGeometry)):
+            return lhsGeometry.geometries == rhsGeometry.geometries
+        default:
+            return false
+        }
+    }
+}
+
+extension Geometry: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case .Point(let point):
+            hasher.combine(point.coordinates)
+        case .LineString(let line):
+            hasher.combine(line.coordinates)
+        case .Polygon(let polygon):
+            hasher.combine(polygon.coordinates)
+        case .MultiPoint(let multiPoint):
+            hasher.combine(multiPoint.coordinates)
+        case .MultiLineString(let multiLineString):
+            hasher.combine(multiLineString.coordinates)
+        case .MultiPolygon(let multiPolygon):
+            hasher.combine(multiPolygon.coordinates)
+        case .GeometryCollection(let geometryCollection):
+            hasher.combine(geometryCollection.geometries)
+        }
+    }
 }
