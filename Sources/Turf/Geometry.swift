@@ -80,7 +80,7 @@ public struct Location: Hashable {
         self.longitude = longitude
     }
 
-    var coordinate: CLLocationCoordinate2D {
+    public var coordinate2D: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }

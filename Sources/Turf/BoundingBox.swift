@@ -23,8 +23,8 @@ public struct BoundingBox: Codable {
     }
     
     public init(_ northWest: Location, _ southEast: Location) {
-        self.northWest = northWest.coordinate
-        self.southEast = southEast.coordinate
+        self.northWest = northWest.coordinate2D
+        self.southEast = southEast.coordinate2D
     }
     
     public func contains(_ coordinate: Location) -> Bool {

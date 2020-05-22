@@ -13,8 +13,8 @@ class BoundingBoxTests: XCTestCase {
             Location(latitude: 2, longitude: 1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, Location(latitude: 2, longitude: 1).coordinate)
-        XCTAssertEqual(bbox!.southEast, Location(latitude: 1, longitude: 2).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: 2, longitude: 1).coordinate2D)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: 1, longitude: 2).coordinate2D)
     }
     
     func testAllNegative() {
@@ -23,8 +23,8 @@ class BoundingBoxTests: XCTestCase {
             Location(latitude: -2, longitude: -1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, Location(latitude: -1, longitude: -2).coordinate)
-        XCTAssertEqual(bbox!.southEast, Location(latitude: -2, longitude: -1).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: -1, longitude: -2).coordinate2D)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: -2, longitude: -1).coordinate2D)
     }
     
     func testPositiveLatNegativeLon() {
@@ -33,8 +33,8 @@ class BoundingBoxTests: XCTestCase {
             Location(latitude: 2, longitude: -1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, Location(latitude: 2, longitude: -2).coordinate)
-        XCTAssertEqual(bbox!.southEast, Location(latitude: 1, longitude: -1).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: 2, longitude: -2).coordinate2D)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: 1, longitude: -1).coordinate2D)
     }
     
     func testNegativeLatPositiveLon() {
@@ -43,7 +43,7 @@ class BoundingBoxTests: XCTestCase {
             Location(latitude: -2, longitude: 1)
         ]
         let bbox = BoundingBox(from: coordinates)
-        XCTAssertEqual(bbox!.northWest, Location(latitude: -1, longitude: 1).coordinate)
-        XCTAssertEqual(bbox!.southEast, Location(latitude: -2, longitude: 2).coordinate)
+        XCTAssertEqual(bbox!.northWest, Location(latitude: -1, longitude: 1).coordinate2D)
+        XCTAssertEqual(bbox!.southEast, Location(latitude: -2, longitude: 2).coordinate2D)
     }
 }
