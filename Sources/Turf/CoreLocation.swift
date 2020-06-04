@@ -71,7 +71,7 @@ struct LocationCodable: Codable {
         var container = try decoder.unkeyedContainer()
         longitude = try container.decode(CLLocationDegrees.self)
         latitude = try container.decode(CLLocationDegrees.self)
-        altitude = try container.decode(CLLocationDegrees.self)
+        altitude = try container.decodeIfPresent(CLLocationDegrees.self)
     }
 
     init(_ coordinate: CLLocationCoordinate2D) {
