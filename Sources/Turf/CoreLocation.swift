@@ -64,7 +64,9 @@ struct LocationCodable: Codable {
         var container = encoder.unkeyedContainer()
         try container.encode(longitude)
         try container.encode(latitude)
-        try container.encode(altitude)
+        if let altitude = altitude {
+            try container.encode(altitude)
+        }
     }
 
     init(from decoder: Decoder) throws {
