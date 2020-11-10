@@ -9,7 +9,7 @@ let metersPerRadian: CLLocationDistance = 6_373_000.0
 let equatorialRadius: CLLocationDistance = 6_378_137
 
 public typealias LineSegment = (Location, Location)
-
+public typealias TurfGeometry = Geometry
 
 public struct Turf {
     
