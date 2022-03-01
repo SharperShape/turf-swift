@@ -274,19 +274,19 @@ extension NSValue {
 
     /// Converts an array of `CGPoint` values wrapped in an `NSValue`
     /// to an array of `LocationCoordinate2D`.
-    internal static func toCoordinates(array: [NSValue]) -> [LocationCoordinate2D] {
+    static func toCoordinates(array: [NSValue]) -> [LocationCoordinate2D] {
         return array.map({ $0.coordinateValue() })
     }
 
     /// Converts a two-dimensional array of `CGPoint` values wrapped in an `NSValue`
     /// to a two-dimensional array of `LocationCoordinate2D`.
-    internal static func toCoordinates2D(array: [[NSValue]]) -> [[LocationCoordinate2D]] {
+    static func toCoordinates2D(array: [[NSValue]]) -> [[LocationCoordinate2D]] {
         return array.map({ toCoordinates(array: $0) })
     }
 
     /// Converts a three-dimensional array of `CGPoint` values wrapped in an `NSValue`
     /// to a three-dimensional array of `LocationCoordinate2D`.
-    internal static func toCoordinates3D(array: [[[NSValue]]]) -> [[[LocationCoordinate2D]]] {
+    static func toCoordinates3D(array: [[[NSValue]]]) -> [[[LocationCoordinate2D]]] {
         return array.map({ toCoordinates2D(array: $0) })
     }
 }
@@ -294,12 +294,12 @@ extension NSValue {
 extension LocationCoordinate2D {
 
     /// Converts a `CLLocationCoordinate` to a `CLLocation`.
-    internal var location: CLLocation {
+    var location: CLLocation {
         CLLocation(latitude: latitude, longitude: longitude)
     }
 
     /// Returns a new `CLLocationCoordinate` value with a new longitude constrained to [-180, +180] degrees.
-    internal func wrap() -> LocationCoordinate2D {
+    func wrap() -> LocationCoordinate2D {
         /**
          mbgl::geo.hpp equivalent:
 
@@ -326,11 +326,11 @@ extension LocationCoordinate2D {
         return LocationCoordinate2D(latitude: latitude, longitude: wrappedLongitude)
     }
 
-    /// Returns a new `CLLocationCoordinate` where the longitude is wrapped if
+    /// Returns a new `LocationCoordinate` where the longitude is wrapped if
     /// the distance from start to end longitudes is between a half and full
     /// world, ensuring that the shortest path is taken.
     /// - Parameter end: The coordinate to possibly wrap, if needed.
-    internal func unwrapForShortestPath(_ end: LocationCoordinate2D) -> LocationCoordinate2D {
+    func unwrapForShortestPath(_ end: LocationCoordinate2D) -> LocationCoordinate2D {
         let delta = fabs(end.longitude - longitude)
 
         if delta <= 180.0 || delta >= 360 {
@@ -348,8 +348,8 @@ extension LocationCoordinate2D {
         return LocationCoordinate2D(latitude: latitude, longitude: lon)
     }
 
-    /// Convert a `CLLocationCoordinate` to a `NSValue` which wraps a `CGPoint`.
-    internal func toValue() -> NSValue {
+    /// Convert a `LocationCoordinate` to a `NSValue` which wraps a `CGPoint`.
+    func toValue() -> NSValue {
         return NSValue(cgPoint: CGPoint(x: latitude, y: longitude))
     }
 }
