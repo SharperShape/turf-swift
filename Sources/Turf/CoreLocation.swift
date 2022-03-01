@@ -291,7 +291,7 @@ extension NSValue {
     }
 }
 
-extension LocationCoordinate2D {
+public extension LocationCoordinate2D {
 
     /// Converts a `CLLocationCoordinate` to a `CLLocation`.
     var location: CLLocation {
