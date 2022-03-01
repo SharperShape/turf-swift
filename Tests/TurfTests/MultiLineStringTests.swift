@@ -8,13 +8,12 @@ class MultiLineStringTests: XCTestCase {
     
     func testMultiLineStringFeature() {
         let data = try! Fixture.geojsonData(from: "multiline")!
-        let firstCoordinate = Location(latitude: 0, longitude: 0)
-        let lastCoordinate = Location(latitude: 6, longitude: 6)
+        let firstCoordinate = LocationCoordinate2D(latitude: 0, longitude: 0)
+        let lastCoordinate = LocationCoordinate2D(latitude: 6, longitude: 6)
         
-        let geojson = try! GeoJSON.parse(Feature.self, from: data)
+        let geojson = try! JSONDecoder().decode(Feature.self, from: data)
         
-        XCTAssert(geojson.geometry.type == .MultiLineString)
-        guard case let .MultiLineString(multiLineStringCoordinates) = geojson.geometry else {
+        guard case let .multiLineString(multiLineStringCoordinates) = geojson.geometry else {
             XCTFail()
             return
         }
@@ -22,8 +21,8 @@ class MultiLineStringTests: XCTestCase {
         XCTAssert(multiLineStringCoordinates.coordinates.last?.last == lastCoordinate)
         
         let encodedData = try! JSONEncoder().encode(geojson)
-        let decoded = try! GeoJSON.parse(Feature.self, from: encodedData)
-        guard case let .MultiLineString(decodedMultiLineStringCoordinates) = decoded.geometry else {
+        let decoded = try! JSONDecoder().decode(Feature.self, from: encodedData)
+        guard case let .multiLineString(decodedMultiLineStringCoordinates) = decoded.geometry else {
             XCTFail()
             return
         }

@@ -1,32 +1,45 @@
 import Foundation
 
-
-public struct FeatureCollection: GeoJSONObject {
-    public let type: FeatureType = .featureCollection
-    public var identifier: FeatureIdentifier?
-    public var features: Array<Feature> = []
-    public var properties: [String : Any?]?
+/**
+ A [FeatureCollection object](https://datatracker.ietf.org/doc/html/rfc7946#section-3.3) is a collection of Feature objects.
+ */
+public struct FeatureCollection: Equatable, ForeignMemberContainer {
+    /// The features that the collection contains.
+    public var features: [Feature] = []
     
+    public var foreignMembers: JSONObject = [:]
+    
+    /**
+     Initializes a feature collection containing the given features.
+     
+     - parameter features: The features that the collection contains.
+     */
+    public init(features: [Feature]) {
+        self.features = features
+    }
+}
+
+extension FeatureCollection: Codable {
     private enum CodingKeys: String, CodingKey {
-        case type
-        case properties
+        case kind = "type"
         case features
     }
     
-    public init(_ features: [Feature]) {
-        self.features = features
+    enum Kind: String, Codable {
+        case FeatureCollection
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.features = try container.decode([Feature].self, forKey: .features)
-        self.properties = try container.decodeIfPresent([String: Any?].self, forKey: .properties)
+        _ = try container.decode(Kind.self, forKey: .kind)
+        features = try container.decode([Feature].self, forKey: .features)
+        try decodeForeignMembers(notKeyedBy: CodingKeys.self, with: decoder)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
+        try container.encode(Kind.FeatureCollection, forKey: .kind)
         try container.encode(features, forKey: .features)
-        try container.encodeIfPresent(properties, forKey: .properties)
+        try encodeForeignMembers(notKeyedBy: CodingKeys.self, to: encoder)
     }
 }

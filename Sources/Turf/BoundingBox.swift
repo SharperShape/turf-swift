@@ -3,9 +3,22 @@ import Foundation
 import CoreLocation
 #endif
 
-public struct BoundingBox: Codable {
+/**
+ A [bounding box](https://datatracker.ietf.org/doc/html/rfc7946#section-5) indicates the extremes of a `GeoJSONObject` along the x- and y-axes (longitude and latitude, respectively).
+ */
+public struct BoundingBox {
+    /// The southwesternmost position contained in the bounding box.
+    public var southWest: LocationCoordinate2D
     
-    public init?(from coordinates: [Location]?) {
+    /// The northeasternmost position contained in the bounding box.
+    public var northEast: LocationCoordinate2D
+    
+    /**
+     Initializes the smallest bounding box that contains all the given coordinates.
+     
+     - parameter coordinates: The coordinates to fit in the bounding box.
+     */
+    public init?(from coordinates: [LocationCoordinate2D]?) {
         guard coordinates?.count ?? 0 > 0 else {
             return nil
         }
@@ -18,38 +31,62 @@ public struct BoundingBox: Codable {
                 let maxLon = max(coordinate.longitude, result.3)
                 return (minLat: minLat, maxLat: maxLat, minLon: minLon, maxLon: maxLon)
         }
-        northWest = CLLocationCoordinate2D(latitude: maxLat, longitude: minLon)
-        southEast = CLLocationCoordinate2D(latitude: minLat, longitude: maxLon)
+        southWest = LocationCoordinate2D(latitude: minLat, longitude: minLon)
+        northEast = LocationCoordinate2D(latitude: maxLat, longitude: maxLon)
     }
     
-    public init(_ northWest: Location, _ southEast: Location) {
-        self.northWest = northWest.coordinate2D
-        self.southEast = southEast.coordinate2D
+    /**
+     Initializes a bounding box defined by its southwesternmost and northeasternmost positions.
+     
+     - parameter southWest: The southwesternmost position contained in the bounding box.
+     - parameter northEast: The northeasternmost position contained in the bounding box.
+     */
+    public init(southWest: LocationCoordinate2D, northEast: LocationCoordinate2D) {
+        self.southWest = southWest
+        self.northEast = northEast
     }
     
-    public func contains(_ coordinate: Location) -> Bool {
-        return southEast.latitude < coordinate.latitude
-            && northWest.latitude > coordinate.latitude
-            && northWest.longitude < coordinate.longitude
-            && southEast.longitude > coordinate.longitude
+    /**
+     Returns a Boolean value indicating whether the bounding box contains the given position.
+     
+     - parameter coordinate: The coordinate that may or may not be contained by the bounding box.
+     - parameter ignoreBoundary: A Boolean value indicating whether a position lying exactly on the edge of the bounding box should be considered to be contained in the bounding box.
+     - returns: `true` if the bounding box contains the position; `false` otherwise.
+     */
+    public func contains(_ coordinate: LocationCoordinate2D, ignoreBoundary: Bool = true) -> Bool {
+        if ignoreBoundary {
+            return southWest.latitude < coordinate.latitude
+                && northEast.latitude > coordinate.latitude
+                && southWest.longitude < coordinate.longitude
+                && northEast.longitude > coordinate.longitude
+        } else {
+            return southWest.latitude <= coordinate.latitude
+                && northEast.latitude >= coordinate.latitude
+                && southWest.longitude <= coordinate.longitude
+                && northEast.longitude >= coordinate.longitude
+        }
     }
-    
-    // MARK: - Codable
-    
+}
+
+extension BoundingBox: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(southWest.longitude)
+        hasher.combine(southWest.latitude)
+        hasher.combine(northEast.longitude)
+        hasher.combine(northEast.latitude)
+    }
+}
+
+extension BoundingBox: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
-        try container.encode(northWest.codableCoordinates)
-        try container.encode(southEast.codableCoordinates)
+        try container.encode(southWest.codableCoordinates)
+        try container.encode(northEast.codableCoordinates)
     }
     
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
-        northWest = try container.decode(CLLocationCoordinate2DCodable.self).decodedCoordinates
-        southEast = try container.decode(CLLocationCoordinate2DCodable.self).decodedCoordinates
+        southWest = try container.decode(LocationCoordinate2DCodable.self).decodedCoordinates
+        northEast = try container.decode(LocationCoordinate2DCodable.self).decodedCoordinates
     }
-    
-    // MARK: - Private
-    
-    public var northWest: CLLocationCoordinate2D
-    public var southEast: CLLocationCoordinate2D
 }
