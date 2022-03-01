@@ -353,4 +353,48 @@ extension LocationCoordinate2D {
         return NSValue(cgPoint: CGPoint(x: latitude, y: longitude))
     }
 }
+
+extension Point {
+    public init(_ coordinates: CLLocationCoordinate2D) {
+        self.coordinates = LocationCoordinate2D(latitude: coordinates.latitude, longitude: coordinates.longitude)
+    }
+}
+
+extension LineString {
+    public init(_ coordinates: [CLLocationCoordinate2D]) {
+        self.coordinates = coordinates.map { LocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)}
+    }
+}
+
+extension Polygon {
+    public init(_ coordinates: [[CLLocationCoordinate2D]]) {
+        self.coordinates = coordinates.map { c in
+            c.map { LocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+        }
+    }
+}
+
+extension MultiPoint {
+    public init(_ coordinates: [CLLocationCoordinate2D]) {
+        self.coordinates = coordinates.map { LocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)}
+    }
+}
+
+extension MultiLineString {
+    public init(_ coordinates: [[CLLocationCoordinate2D]]) {
+        self.coordinates = coordinates.map { c in
+            c.map { LocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+        }
+    }
+}
+
+extension MultiPolygon {
+    public init(_ coordinates: [[[CLLocationCoordinate2D]]]) {
+        self.coordinates = coordinates.map({ ca in
+            ca.map { c in
+                c.map { LocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+            }
+        })
+    }
+}
 #endif
