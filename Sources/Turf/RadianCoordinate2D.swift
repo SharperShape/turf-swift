@@ -18,6 +18,8 @@ public struct RadianCoordinate2D {
     
     /// The longitude measured in radians.
     private(set) var longitude: LocationRadians
+
+    private(set) var altitude: LocationDistance?
     
     /**
      Initializes a coordinate pair located at the given latitude and longitude.
@@ -25,9 +27,10 @@ public struct RadianCoordinate2D {
      - parameter latitude: The latitude measured in radians.
      - parameter longitude: The longitude measured in radians.
      */
-    public init(latitude: LocationRadians, longitude: LocationRadians) {
+    public init(latitude: LocationRadians, longitude: LocationRadians, altitude: LocationDistance?) {
         self.latitude = latitude
         self.longitude = longitude
+        self.altitude = altitude
     }
     
     /**
@@ -38,6 +41,7 @@ public struct RadianCoordinate2D {
     public init(_ degreeCoordinate: LocationCoordinate2D) {
         latitude = degreeCoordinate.latitude.toRadians()
         longitude = degreeCoordinate.longitude.toRadians()
+        altitude = degreeCoordinate.altitude
     }
     
     /**
@@ -60,7 +64,7 @@ public struct RadianCoordinate2D {
             + cos(latitude) * sin(distance) * cos(radiansDirection))
         let otherLongitude = longitude + atan2(sin(radiansDirection) * sin(distance) * cos(latitude),
                                                cos(distance) - sin(latitude) * sin(otherLatitude))
-        return RadianCoordinate2D(latitude: otherLatitude, longitude: otherLongitude)
+        return RadianCoordinate2D(latitude: otherLatitude, longitude: otherLongitude, altitude: altitude)
     }
     
     /**

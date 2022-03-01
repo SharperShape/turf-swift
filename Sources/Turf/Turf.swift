@@ -10,6 +10,8 @@ let equatorialRadius: LocationDistance = 6_378_137
 /// A segment between two positions in a `LineString` geometry or `Ring`.
 public typealias LineSegment = (LocationCoordinate2D, LocationCoordinate2D)
 
+public typealias TurfGeometry = Geometry
+
 /**
  Returns the intersection of two line segments.
  

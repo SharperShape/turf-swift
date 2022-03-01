@@ -1,37 +1,38 @@
 import Foundation
-#if canImport(CoreLocation)
-import CoreLocation
-#endif
-
-#if canImport(CoreLocation)
-/**
- An azimuth measured in degrees clockwise from true north.
- 
- This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationDirection` anywhere you see this type.
- */
-public typealias LocationDirection = CLLocationDirection
-
-/**
- A distance in meters.
- 
- This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationDistance` anywhere you see this type.
- */
-public typealias LocationDistance = CLLocationDistance
-
-/**
- A latitude or longitude in degrees.
- 
- This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationDegrees` anywhere you see this type.
- */
-public typealias LocationDegrees = CLLocationDegrees
-
-/**
- A geographic coordinate.
- 
- This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationCoordinate2D` anywhere you see this type.
- */
-public typealias LocationCoordinate2D = CLLocationCoordinate2D
-#else
+//import CoreLocation
+//#if canImport(CoreLocation)
+//import CoreLocation
+//#endif
+//
+//#if canImport(CoreLocation)
+///**
+// An azimuth measured in degrees clockwise from true north.
+//
+// This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationDirection` anywhere you see this type.
+// */
+//public typealias LocationDirection = CLLocationDirection
+//
+///**
+// A distance in meters.
+//
+// This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationDistance` anywhere you see this type.
+// */
+//public typealias LocationDistance = CLLocationDistance
+//
+///**
+// A latitude or longitude in degrees.
+//
+// This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationDegrees` anywhere you see this type.
+// */
+//public typealias LocationDegrees = CLLocationDegrees
+//
+///**
+// A geographic coordinate.
+//
+// This is a compatibility shim to keep the library’s public interface consistent between Apple and non-Apple platforms that lack Core Location. On Apple platforms, you can use `CLLocationCoordinate2D` anywhere you see this type.
+// */
+//public typealias LocationCoordinate2D = CLLocationCoordinate2D
+//#else
 /**
  An azimuth measured in degrees clockwise from true north.
  */
@@ -60,16 +61,19 @@ public struct LocationCoordinate2D {
      The longitude in degrees.
      */
     public var longitude: LocationDegrees
+
+    public var altitude: LocationDistance?
     
     /**
      Creates a degree-based geographic coordinate.
      */
-    public init(latitude: LocationDegrees, longitude: LocationDegrees) {
+    public init(latitude: LocationDegrees, longitude: LocationDegrees, altitude: LocationDistance? = nil) {
         self.latitude = latitude
         self.longitude = longitude
+        self.altitude = altitude
     }
 }
-#endif
+//#endif
 
 extension LocationCoordinate2D {
     /**
@@ -78,7 +82,8 @@ extension LocationCoordinate2D {
     var normalized: LocationCoordinate2D {
         return .init(
             latitude: latitude,
-            longitude: longitude.wrap(min: -180, max: 180)
+            longitude: longitude.wrap(min: -180, max: 180),
+            altitude: altitude
         )
     }
 }
@@ -127,25 +132,31 @@ extension LocationDegrees {
 struct LocationCoordinate2DCodable: Codable {
     var latitude: LocationDegrees
     var longitude: LocationDegrees
+    var altitude: LocationDistance?
     var decodedCoordinates: LocationCoordinate2D {
-        return LocationCoordinate2D(latitude: latitude, longitude: longitude)
+        return LocationCoordinate2D(latitude: latitude, longitude: longitude, altitude: altitude)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         try container.encode(longitude)
         try container.encode(latitude)
+        if let altitude = altitude {
+            try container.encode(altitude)
+        }
     }
     
     init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         longitude = try container.decode(LocationDegrees.self)
         latitude = try container.decode(LocationDegrees.self)
+        altitude = try container.decodeIfPresent(LocationDistance.self)
     }
     
     init(_ coordinate: LocationCoordinate2D) {
         latitude = coordinate.latitude
         longitude = coordinate.longitude
+        altitude = coordinate.altitude
     }
 }
 
@@ -195,11 +206,11 @@ extension LocationCoordinate2D: Equatable {
     
     /// Instantiates a LocationCoordinate2D from a RadianCoordinate2D
     public init(_ radianCoordinate: RadianCoordinate2D) {
-        self.init(latitude: radianCoordinate.latitude.toDegrees(), longitude: radianCoordinate.longitude.toDegrees())
+        self.init(latitude: radianCoordinate.latitude.toDegrees(), longitude: radianCoordinate.longitude.toDegrees(), altitude: radianCoordinate.altitude)
     }
     
     public static func ==(lhs: LocationCoordinate2D, rhs: LocationCoordinate2D) -> Bool {
-        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+        return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude && lhs.altitude == rhs.altitude
     }
     
     /**
@@ -237,3 +248,11 @@ extension LocationCoordinate2D: Equatable {
     }
 }
 
+#if canImport(CoreLocation)
+import CoreLocation
+extension LocationCoordinate2D {
+    var coordinate2D: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+}
+#endif
