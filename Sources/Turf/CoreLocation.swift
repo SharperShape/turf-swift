@@ -253,7 +253,7 @@ import CoreLocation
 import UIKit.UIGeometry
 
 extension LocationCoordinate2D {
-    var coordinate2D: CLLocationCoordinate2D {
+    public var coordinate2D: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
@@ -264,7 +264,7 @@ extension CLLocationCoordinate2D: Equatable {
     }
 }
 
-extension NSValue {
+public extension NSValue {
 
     /// Converts the `CGPoint` value of an `NSValue` to a `LocationCoordinate2D`.
     func coordinateValue() -> LocationCoordinate2D {
