@@ -252,8 +252,8 @@ extension LocationCoordinate2D: Equatable {
 import CoreLocation
 import UIKit.UIGeometry
 
-extension LocationCoordinate2D {
-    public var coordinate2D: CLLocationCoordinate2D {
+public extension LocationCoordinate2D {
+    var coordinate2D: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
