@@ -91,6 +91,12 @@ extension Geometry: Codable {
     }
 }
 
+extension Geometry: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self)
+    }
+}
+
 /**
  A type that can be represented as a `Geometry` instance.
  */
