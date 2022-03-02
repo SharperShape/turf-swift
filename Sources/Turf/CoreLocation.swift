@@ -289,6 +289,7 @@ public extension NSValue {
     static func toCoordinates3D(array: [[[NSValue]]]) -> [[[LocationCoordinate2D]]] {
         return array.map({ toCoordinates2D(array: $0) })
     }
+
 }
 
 public extension LocationCoordinate2D {
@@ -395,6 +396,32 @@ extension MultiPolygon {
                 c.map { LocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
             }
         })
+    }
+}
+
+public extension BoundingBox {
+    private static func tile2lon(_ x: Int, _ z: Int) -> CLLocationDegrees {
+        let xd = CLLocationDegrees(x)
+        let zd = CLLocationDegrees(z)
+        return CLLocationDegrees(xd / pow(2, zd) * 360 - 180);
+    }
+
+    private static func tile2lat(_ y: Int, _ z: Int) -> CLLocationDegrees {
+        let yd = CLLocationDegrees(y)
+        let zd = CLLocationDegrees(z)
+        let n = .pi - 2 * .pi * yd / pow(2, zd);
+        return CLLocationDegrees(atan(0.5 * (exp(n) - exp(-n))) * 180.0 / .pi)
+    }
+
+    static func fromTile(x: Int, y: Int, z: Int) -> Self {
+        let e = tile2lon(x + 1, z)
+        let w = tile2lon(x, z)
+        let s = tile2lat(y + 1, z)
+        let n = tile2lat(y, z)
+        return BoundingBox(
+            southWest: LocationCoordinate2D(latitude: s, longitude: w),
+            northEast: LocationCoordinate2D(latitude: n, longitude: e)
+            )
     }
 }
 #endif
