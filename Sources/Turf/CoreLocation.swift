@@ -355,6 +355,12 @@ public extension LocationCoordinate2D {
     }
 }
 
+public extension CLLocation {
+    var location2D: LocationCoordinate2D {
+        LocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude, altitude: altitude)
+    }
+}
+
 extension Point {
     public init(_ coordinates: CLLocationCoordinate2D) {
         self.coordinates = LocationCoordinate2D(latitude: coordinates.latitude, longitude: coordinates.longitude)
