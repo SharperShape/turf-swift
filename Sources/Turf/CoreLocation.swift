@@ -264,33 +264,33 @@ extension CLLocationCoordinate2D: Equatable {
     }
 }
 
-public extension NSValue {
-
-    /// Converts the `CGPoint` value of an `NSValue` to a `LocationCoordinate2D`.
-    func coordinateValue() -> LocationCoordinate2D {
-        let point = cgPointValue
-        return LocationCoordinate2D(latitude: LocationDegrees(point.x), longitude: LocationDegrees(point.y))
-    }
-
-    /// Converts an array of `CGPoint` values wrapped in an `NSValue`
-    /// to an array of `LocationCoordinate2D`.
-    static func toCoordinates(array: [NSValue]) -> [LocationCoordinate2D] {
-        return array.map({ $0.coordinateValue() })
-    }
-
-    /// Converts a two-dimensional array of `CGPoint` values wrapped in an `NSValue`
-    /// to a two-dimensional array of `LocationCoordinate2D`.
-    static func toCoordinates2D(array: [[NSValue]]) -> [[LocationCoordinate2D]] {
-        return array.map({ toCoordinates(array: $0) })
-    }
-
-    /// Converts a three-dimensional array of `CGPoint` values wrapped in an `NSValue`
-    /// to a three-dimensional array of `LocationCoordinate2D`.
-    static func toCoordinates3D(array: [[[NSValue]]]) -> [[[LocationCoordinate2D]]] {
-        return array.map({ toCoordinates2D(array: $0) })
-    }
-
-}
+//public extension NSValue {
+//
+//    /// Converts the `CGPoint` value of an `NSValue` to a `LocationCoordinate2D`.
+//    func coordinateValue() -> LocationCoordinate2D {
+//        let point = cgPointValue
+//        return LocationCoordinate2D(latitude: LocationDegrees(point.x), longitude: LocationDegrees(point.y))
+//    }
+//
+//    /// Converts an array of `CGPoint` values wrapped in an `NSValue`
+//    /// to an array of `LocationCoordinate2D`.
+//    static func toCoordinates(array: [NSValue]) -> [LocationCoordinate2D] {
+//        return array.map({ $0.coordinateValue() })
+//    }
+//
+//    /// Converts a two-dimensional array of `CGPoint` values wrapped in an `NSValue`
+//    /// to a two-dimensional array of `LocationCoordinate2D`.
+//    static func toCoordinates2D(array: [[NSValue]]) -> [[LocationCoordinate2D]] {
+//        return array.map({ toCoordinates(array: $0) })
+//    }
+//
+//    /// Converts a three-dimensional array of `CGPoint` values wrapped in an `NSValue`
+//    /// to a three-dimensional array of `LocationCoordinate2D`.
+//    static func toCoordinates3D(array: [[[NSValue]]]) -> [[[LocationCoordinate2D]]] {
+//        return array.map({ toCoordinates2D(array: $0) })
+//    }
+//
+//}
 
 public extension LocationCoordinate2D {
 
