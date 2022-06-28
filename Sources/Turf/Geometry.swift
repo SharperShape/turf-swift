@@ -93,7 +93,22 @@ extension Geometry: Codable {
 
 extension Geometry: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self)
+        switch self {
+        case .point(let g):
+            hasher.combine(g)
+        case .lineString(let g):
+            hasher.combine(g)
+        case .polygon(let g):
+            hasher.combine(g)
+        case .multiPoint(let g):
+            hasher.combine(g)
+        case .multiLineString(let g):
+            hasher.combine(g)
+        case .multiPolygon(let g):
+            hasher.combine(g)
+        case .geometryCollection(let g):
+            hasher.combine(g)
+        }
     }
 }
 

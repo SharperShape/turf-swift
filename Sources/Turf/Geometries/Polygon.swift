@@ -342,4 +342,7 @@ extension Polygon {
             latitude: center.latitude + areaFactor * sum.latitude,
             longitude: center.longitude + areaFactor * sum.longitude
         ).normalized
-    }}
+    }
+}
+
+extension Polygon: Hashable { }

@@ -58,3 +58,5 @@ extension MultiLineString: Codable {
         try encodeForeignMembers(notKeyedBy: CodingKeys.self, to: encoder)
     }
 }
+
+extension MultiLineString: Hashable { }

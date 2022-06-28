@@ -51,3 +51,5 @@ extension Point: Codable {
         try encodeForeignMembers(notKeyedBy: CodingKeys.self, to: encoder)
     }
 }
+
+extension Point: Hashable { }

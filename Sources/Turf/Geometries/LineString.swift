@@ -413,3 +413,5 @@ extension LineString {
         }
     }
 }
+
+extension LineString: Hashable { }

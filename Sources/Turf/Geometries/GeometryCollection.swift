@@ -62,3 +62,5 @@ extension GeometryCollection: Codable {
         try encodeForeignMembers(notKeyedBy: CodingKeys.self, to: encoder)
     }
 }
+
+extension GeometryCollection: Hashable { }

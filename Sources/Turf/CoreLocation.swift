@@ -88,6 +88,8 @@ extension LocationCoordinate2D {
     }
 }
 
+extension LocationCoordinate2D: Hashable { }
+
 extension LocationDirection {
     /**
      Returns a normalized number given min and max bounds.

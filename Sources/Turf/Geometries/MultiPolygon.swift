@@ -80,3 +80,5 @@ extension MultiPolygon {
         }
     }
 }
+
+extension MultiPolygon: Hashable { }

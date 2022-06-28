@@ -47,3 +47,5 @@ extension MultiPoint: Codable {
         try encodeForeignMembers(notKeyedBy: CodingKeys.self, to: encoder)
     }
 }
+
+extension MultiPoint: Hashable { }
