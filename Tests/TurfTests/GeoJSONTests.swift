@@ -3,7 +3,6 @@ import Turf
 #if os(macOS)
 import struct Turf.Polygon
 #endif
-import CoreLocation
 
 class GeoJSONTests: XCTestCase {
     func testConversion() {
@@ -220,7 +219,10 @@ class GeoJSONTests: XCTestCase {
     func testForeignMemberCoding(in object: GeoJSONObject) throws {
         let today = ISO8601DateFormatter().string(from: Date())
         
-        let data = try JSONEncoder().encode(object)
+        let encoder = JSONEncoder()
+        encoder.userInfo[.includesForeignMembers] = true
+        
+        let data = try encoder.encode(object)
         guard var json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any?] else {
             return
         }
@@ -243,10 +245,13 @@ class GeoJSONTests: XCTestCase {
             "label": "Today",
         ]
         
-        let modifiedData = try JSONSerialization.data(withJSONObject: json, options: [])
-        let modifiedObject = try JSONDecoder().decode(GeoJSONObject.self, from: modifiedData)
+        let decoder = JSONDecoder()
+        decoder.userInfo[.includesForeignMembers] = true
         
-        let roundTrippedData = try JSONEncoder().encode(modifiedObject)
+        let modifiedData = try JSONSerialization.data(withJSONObject: json, options: [])
+        let modifiedObject = try decoder.decode(GeoJSONObject.self, from: modifiedData)
+        
+        let roundTrippedData = try encoder.encode(modifiedObject)
         let roundTrippedJSON = try JSONSerialization.jsonObject(with: roundTrippedData, options: []) as? [String: Any?]
         
         let when = try XCTUnwrap(roundTrippedJSON?["when"] as? [String: Any?])

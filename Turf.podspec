@@ -3,9 +3,9 @@ Pod::Spec.new do |s|
   # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
   s.name = "Turf"
-  s.version = "2.2.0"
+  s.version = "2.8.0"
   s.summary = "Simple spatial analysis."
-  s.description = "A spatial analysis library written in Swift for native iOS, macOS, tvOS, watchOS, and Linux applications, ported from Turf.js."
+  s.description = "A spatial analysis library written in Swift for native iOS, macOS, tvOS, watchOS, visionOS, and Linux applications, ported from Turf.js."
 
   s.homepage = "https://github.com/mapbox/turf-swift"
 
@@ -20,10 +20,13 @@ Pod::Spec.new do |s|
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
-  s.ios.deployment_target = "10.0"
-  s.osx.deployment_target = "10.12"
-  s.tvos.deployment_target = "10.0"
-  s.watchos.deployment_target = "3.0"
+  s.ios.deployment_target = "11.0"
+  s.osx.deployment_target = "10.13"
+  s.tvos.deployment_target = "11.0"
+  s.watchos.deployment_target = "4.0"
+  # CocoaPods doesn't support releasing of visionOS pods yet, need to wait for v1.15.0 release of CocoaPods
+  # with this fix https://github.com/CocoaPods/CocoaPods/pull/12159.
+  # s.visionos.deployment_target = "1.0"
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
 
@@ -40,6 +43,6 @@ Pod::Spec.new do |s|
 
   s.frameworks = 'CoreLocation'
 
-  s.swift_version = "5.0"
+  s.swift_version = "5.7"
 
 end

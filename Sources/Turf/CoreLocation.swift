@@ -51,7 +51,7 @@ public typealias LocationDegrees = Double
 /**
  A geographic coordinate with its components measured in degrees.
  */
-public struct LocationCoordinate2D {
+public struct LocationCoordinate2D: Sendable {
     /**
      The latitude in degrees.
      */
