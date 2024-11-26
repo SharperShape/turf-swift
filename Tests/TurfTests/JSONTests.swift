@@ -37,15 +37,15 @@ class JSONTests: XCTestCase {
         
         XCTAssertNil(JSONValue(rawValue: NSNull()))
         XCTAssertEqual(JSONValue(rawValue: [NSNull()]), .array([nil]))
-        XCTAssertEqual(JSONArray(rawValue: [NSNull()]), [nil])
+        XCTAssertEqual(JSONArray(turfRawValue: [NSNull()]), [nil])
         XCTAssertEqual(JSONValue(rawValue: ["NSNull": NSNull()]), .object(["NSNull": nil]))
-        XCTAssertEqual(JSONObject(rawValue: ["NSNull": NSNull()]), ["NSNull": nil])
+        XCTAssertEqual(JSONObject(turfRawValue: ["NSNull": NSNull()]), ["NSNull": nil])
         
         XCTAssertNil(JSONValue(rawValue: Set(["Get"])))
         XCTAssertEqual(JSONValue(rawValue: [Set(["Get"])]), .array([nil]))
-        XCTAssertEqual(JSONArray(rawValue: [Set(["Get"])]), [nil])
+        XCTAssertEqual(JSONArray(turfRawValue: [Set(["Get"])]), [nil])
         XCTAssertEqual(JSONValue(rawValue: ["set": Set(["Get"])]), .object(["set": nil]))
-        XCTAssertEqual(JSONObject(rawValue: ["set": Set(["Get"])]), ["set": nil])
+        XCTAssertEqual(JSONObject(turfRawValue: ["set": Set(["Get"])]), ["set": nil])
     }
     
     func testLiterals() throws {
@@ -257,5 +257,49 @@ class JSONTests: XCTestCase {
         XCTAssertNoThrow(decodedValue = try JSONDecoder().decode(JSONValue.self, from: serializedArrayFromString))
         XCTAssertNotNil(decodedValue)
         XCTAssertEqual(.array([.number(0), .number(1), .boolean(true), .boolean(false)]), decodedValue)
+    }
+    
+    func testConvenienceAccessors() {
+        XCTAssertEqual(JSONValue.string("Jason").string, "Jason")
+        XCTAssertEqual(JSONValue.string("Jason").number, nil)
+
+        XCTAssertEqual(JSONValue.number(42).number, 42)
+        XCTAssertEqual(JSONValue.number(42).string, nil)
+
+        XCTAssertEqual(JSONValue.boolean(true).boolean, true)
+        XCTAssertEqual(JSONValue.boolean(true).string, nil)
+
+        XCTAssertEqual(JSONValue.array(["Jason", 42, 3.1415, false, true, nil, [], [:]]).array, ["Jason", 42, 3.1415, false, true, nil, [], [:]])
+        XCTAssertEqual(JSONValue.array(["Jason", 42, 3.1415, false, true, nil, [], [:]]).string, nil)
+
+        XCTAssertEqual(JSONValue.object([
+            "string": "Jason",
+            "integer": 42,
+            "float": 3.1415,
+            "false": false,
+            "true": true,
+            "nil": nil,
+            "array": [],
+            "dictionary": [:],
+        ]).object, [
+            "string": "Jason",
+            "integer": 42,
+            "float": 3.1415,
+            "false": false,
+            "true": true,
+            "nil": nil,
+            "array": [],
+            "dictionary": [:],
+        ])
+        XCTAssertEqual(JSONValue.object([
+            "string": "Jason",
+            "integer": 42,
+            "float": 3.1415,
+            "false": false,
+            "true": true,
+            "nil": nil,
+            "array": [],
+            "dictionary": [:],
+        ]).string, nil)
     }
 }
